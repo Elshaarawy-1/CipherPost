@@ -1,4 +1,4 @@
-package com.csed.Contact_command;
+package com.csed.mailserver.mailserver.Commands.Contacts;
 
 public class AddContact implements ContactCommand<Void>{
     

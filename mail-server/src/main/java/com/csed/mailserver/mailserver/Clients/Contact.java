@@ -1,4 +1,4 @@
-package com.csed.mailserver.mailserver;
+package com.csed.mailserver.mailserver.Clients;
 
 import java.util.List;
 

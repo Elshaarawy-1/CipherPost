@@ -1,10 +1,10 @@
-package com.csed.Msg_command;
+package com.csed.mailserver.mailserver.Commands.Messages;
 
 import java.util.List;
 
 import com.csed.mailserver.mailserver.msg;
 
-public class Searchmsg implements MsgCommand<List<msg>>{
+public class SearchMessage implements MsgCommand<List<msg>>{
     private String criteria;
     private String searchinput;
 

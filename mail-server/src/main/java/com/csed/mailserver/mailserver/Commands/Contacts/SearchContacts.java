@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.csed.mailserver.mailserver.Clients.Contact;
 
-public class SearchContact implements ContactCommand<List<Contact>>{
+public class SearchContacts implements ContactCommand<List<Contact>>{
     //!! ContactFacade
 
     public List<Contact> execute()

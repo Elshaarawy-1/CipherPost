@@ -2,14 +2,14 @@ package com.csed.mailserver.mailserver.Commands.Messages;
 
 import java.util.List;
 
-import com.csed.mailserver.mailserver.msg;
+import com.csed.mailserver.mailserver.Clients.Message;
 
-public class SearchMessage implements MsgCommand<List<msg>>{
+public class SearchMessages implements MessageCommand<List<Message>>{
     private String criteria;
-    private String searchinput;
+    private String search_input;
 
     //!! private MessageFacade msg_facade;
-    public List<msg> execute()
+    public List<Message> execute()
     {
         return null; //will be removed
         //!!return msg_facade.searchBy(criteria,searchinput);

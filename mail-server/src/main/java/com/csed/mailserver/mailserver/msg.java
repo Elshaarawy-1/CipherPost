@@ -1,3 +1,5 @@
+package com.csed.mailserver.mailserver;
+
 public class msg {
     public user sender;
     public user receiver;
@@ -6,7 +8,7 @@ public class msg {
     public int time;
     public int msg_priority;
     public String[] attachements;
-
+    
     msg(msgDTO msg)
     {
         this.sender = msg.sender;
@@ -17,5 +19,4 @@ public class msg {
         this.msg_priority = msg.msg_priority;
         this.attachements = msg.attachements;
     }
-    
 }

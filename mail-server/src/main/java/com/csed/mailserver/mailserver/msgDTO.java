@@ -1,3 +1,5 @@
+package com.csed.mailserver.mailserver;
+
 public class msgDTO {
     user sender;
     user receiver;

@@ -1,7 +1,7 @@
 package com.csed.mailserver.mailserver.Controllers;
 
 import com.csed.mailserver.mailserver.DTOs.MessageDTO;
-import com.csed.mailserver.mailserver.Clients.User;
+import com.csed.mailserver.mailserver.Clients.Message;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
     @PostMapping("/send")
     public ResponseEntity<Void> sendMessage(@RequestBody MessageDTO message) {
-        User.Message sent_msg = new User.Message(message);
+        Message sent_msg = new Message(message);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

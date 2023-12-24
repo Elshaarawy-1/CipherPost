@@ -4,5 +4,5 @@ import java.util.List;
 
 public class Contact {
     private String contact_name;
-    private List<user> user_names;    
+    private List<User> user_names;    
 }

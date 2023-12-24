@@ -1,11 +1,10 @@
 package com.csed.mailserver.mailserver.Commands.Messages;
 
-public class ComposeMessage implements MsgCommand<Void>{
+public class DeleteMessage implements MessageCommand<Void> {
     
-
     public Void execute()
     {
-        // compose email method
+        // delte method
         return null;
-    }   
+    }
 }

@@ -28,6 +28,10 @@ public class User {
 
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getUsername() {
         return username;
     }

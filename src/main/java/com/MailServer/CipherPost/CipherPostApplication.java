@@ -16,6 +16,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -83,11 +84,12 @@ public class CipherPostApplication {
 			}
 
 			String content = faker.lorem().paragraph();
+			String subject = faker.lorem().word();
 
 			// Increment the timestamp for each message
 			Timestamp timestamp = new Timestamp(System.currentTimeMillis() - 500000 * i * 1000L); // Adjust the increment as needed
 
-			Message fakeMessage = new Message(user, messageRecipients, content, timestamp);
+			Message fakeMessage = new Message(user, messageRecipients, subject, content, timestamp);
 			messages.add(fakeMessage);
 			for (int j = 0; j < numRecipients; j++) {
 				folder = folderService.findFolderByNameAndUser("inbox", messageRecipients.get(j));

@@ -10,6 +10,8 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -37,14 +39,10 @@ public class FolderService {
 
         return findFolderByNameAndUser(folderName, user);
     }
-    public Page<FolderMessage> getPaginatedMessages(Folder folder, int offset, int pageSize) {
-        Page<FolderMessage> msgs =  folderMessagesRepository.findByFolder(folder, PageRequest.of(offset, pageSize));
-        return  msgs;
-    }
     public void cleanUpTrashFolder() {
         System.out.println("Clean Up Time");
         Timestamp thirtyDaysAgo = new Timestamp(System.currentTimeMillis() - (30L * 24L * 60L * 60L * 1000L));
-        List<FolderMessage> messagesToDelete = folderMessagesRepository.findByFolder_FolderNameAndAddTimeBefore("trash", thirtyDaysAgo);
+        List<FolderMessage> messagesToDelete = folderMessagesRepository.findByFolder_FolderNameAndAddTimeBefore("inbox", thirtyDaysAgo);
         folderMessagesRepository.deleteAll(messagesToDelete);
     }
 }

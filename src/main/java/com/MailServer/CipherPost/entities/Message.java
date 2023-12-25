@@ -38,6 +38,11 @@ public class Message {
             columnDefinition = "TEXT"
     )
     private String content;
+    @Column(
+            name = "msg_priorty",
+            nullable = false
+    )
+    private int msg_priorty;
 
     public Message() {
         this.timestamp = new Timestamp(System.currentTimeMillis());

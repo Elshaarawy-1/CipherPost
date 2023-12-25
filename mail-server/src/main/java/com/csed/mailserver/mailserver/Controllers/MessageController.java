@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
     @PostMapping("/send")
     public ResponseEntity<Void> sendMessage(@RequestBody MessageDTO message) {
-        Message sent_msg = new Message(message);
+        Message sent_msg = new Message.MessageBuilder(message)
+                .withAttachments(message.getAttachments())
+                .build();
         Command<Void> sendCommand = new ComposeMessage(sent_msg);
         sendCommand.execute();
         return ResponseEntity.status(HttpStatus.CREATED).build();

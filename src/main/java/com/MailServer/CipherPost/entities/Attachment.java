@@ -7,66 +7,57 @@ import jakarta.persistence.*;
 
 import jakarta.persistence.*;
 
-@Entity(name = "attachments")
+@Entity
+@Table(name = "message_attachments")
 public class Attachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "attachment_id")
-    private Long id;
+    private int id;
 
-    @ManyToOne
-    @JoinColumn(name = "msg_id")
-    private Message message;
+    @Column(name = "filename")
+    private String filename;
 
-    @Column(name = "file_name", nullable = false)
-    private String fileName;
+    @Column(name = "content_type")
+    private String contentType;
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
+    @Column(name = "DATA", nullable = true)
+    private byte[] data;
 
-
+    public Attachment(String file, String contentType, byte[] bytes) {
+        this.filename = file;
+        this.contentType = contentType;
+        this.data = bytes;
+    }
 
     public Attachment() {
+
     }
 
-    public Long getId() {
+
+    public int getId() {
         return id;
     }
-    public String getFileName() {
-        return fileName;
+
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
+
+    public String getContentType() {
+        return contentType;
+    }
+
+    public byte[] getData() {
+        return data;
+    }
+
+    public void setData(byte[] data) {
+        this.data = data;
     }
 }
-
-
-////@Entity(name = "attachments")
-//public class Attachment {
-////    @Id
-////    @GeneratedValue(strategy = GenerationType.IDENTITY)
-////    @Column(name = "attachment_id")
-////    private Long id;
-//
-////    @Column(name = "file_name", nullable = false)
-//    private String fileName;
-//    private String content;
-//
-//    // You can store the attachment content in various ways, such as byte array, file path, etc.
-//    // For simplicity, let's use a byte array here
-////    @Lob
-////    @Column(name = "content", nullable = false)
-////    private byte[] content;
-//
-//    // Define a Many-to-One relationship with Message
-////    @ManyToOne
-////    @JoinColumn(name = "msg_id")
-////    private Message message;
-//
-//    // Constructors, getters, and setters
-//    public Attachment(){
-//
-//    }
-//
-//    public String getFileName() {
-//        return fileName;
-//    }
-//
-//    public String getContent() {
-//        return content;
-//    }
-//}

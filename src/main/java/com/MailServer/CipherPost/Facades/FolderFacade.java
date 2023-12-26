@@ -1,19 +1,28 @@
 package com.MailServer.CipherPost.Facades;
 
+import com.MailServer.CipherPost.Services.FolderMessagesService;
+import com.MailServer.CipherPost.Services.FolderService;
 import com.MailServer.CipherPost.entities.Folder;
 import com.MailServer.CipherPost.entities.Message;
+import com.MailServer.CipherPost.entities.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import java.util.List;
+@Component
 public class FolderFacade {
-    public void changeMessageFolder(Message[] selected_msg, Folder source, Folder destination) {
-        // call repository
+    FolderMessagesService folderMessagesService;
+    FolderService folderService;
+    public void changeMessageFolder(List<Message> selected_msg, Folder source, Folder destination) {
+        folderMessagesService.changeMessageFolder(selected_msg, source, destination);
     }
-    public void deleteFolder(Folder name) {
-        // call repository
+    public void deleteFolder(Folder folder) {
+        folderService.deleteFolder(folder);
     }
     public void renameFolder(Folder old_folder, String new_name) {
-        // call repository
+        folderService.renameFolder(old_folder, new_name);
     }
-    public void createFolder(String name) {
-        // call repository
+    public void createFolder(User user, String name) {
+        folderService.createFolder(user, name);
     }
 }

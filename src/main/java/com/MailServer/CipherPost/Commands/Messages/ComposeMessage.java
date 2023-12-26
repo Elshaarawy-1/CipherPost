@@ -10,14 +10,11 @@ public class ComposeMessage implements MessageCommand<Void> {
     private final MessageFacade messageFacade;
     private final Message sent_msg;
 
-    @Autowired
     public ComposeMessage(MessageFacade messageFacade, Message sent_msg) {
         this.messageFacade = messageFacade;
         this.sent_msg = sent_msg;
     }
-
     public Void execute() {
-        // compose email method
         messageFacade.sendMessage(sent_msg);
         return null;
     }

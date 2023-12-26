@@ -32,4 +32,12 @@ public class Contact {
         this.user = user;
         this.users = users;
     }
+
+    public Contact() {
+
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
 }

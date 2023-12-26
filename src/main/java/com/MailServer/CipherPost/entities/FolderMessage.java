@@ -45,4 +45,7 @@ public class FolderMessage {
     }
 
 
+    public void setFolder(Folder destination) {
+        this.folder = destination;
+    }
 }

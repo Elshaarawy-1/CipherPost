@@ -2,6 +2,7 @@ package com.MailServer.CipherPost.repositories;
 
 import com.MailServer.CipherPost.entities.Folder;
 import com.MailServer.CipherPost.entities.FolderMessage;
+import com.MailServer.CipherPost.entities.Message;
 import com.MailServer.CipherPost.entities.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -27,4 +28,6 @@ public interface FolderMessagesRepository extends JpaRepository<FolderMessage, L
 //    Page<FolderMessage> findByFolderAndMessage_Sender(Folder folder, User user, Pageable pageable);
 
     Page<FolderMessage> findByFolderAndMessage_ContentContaining(Folder folder, String keyword, Pageable pageable);
+
+    FolderMessage findByFolderAndMessage(Folder source, Message msg);
 }

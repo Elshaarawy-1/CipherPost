@@ -1,5 +1,7 @@
 package com.MailServer.CipherPost.Facades;
 
+import com.MailServer.CipherPost.Services.FolderMessagesService;
+import com.MailServer.CipherPost.Services.FolderService;
 import com.MailServer.CipherPost.Services.MessageService;
 import com.MailServer.CipherPost.entities.Folder;
 import com.MailServer.CipherPost.entities.Message;
@@ -12,14 +14,18 @@ import java.util.List;
 public class MessageFacade {
     @Autowired
     MessageService messageService;
+    @Autowired
+    FolderMessagesService folderMessagesService;
+    @Autowired
+    FolderService folderService;
 
     public void sendMessage(Message sent_msg) {
         this.messageService.saveMessage(sent_msg);
     }
-
-//    public void deleteMessage(int[] msg_ids) {
-//        messageRepository.deleteMessage(msg_ids);
-//    }
+    public void deleteMessageFromFolder(Message msg, Folder folder) {
+//        folderMessagesService.deleteMessageFromFolder(msg, folder);
+        folderService.deleteMessageFromFolder(msg, folder);
+    }
 
     public List<Message> sortMessages(Folder currnt_folder, String critieria) {
         return null;

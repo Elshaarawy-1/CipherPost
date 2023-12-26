@@ -56,7 +56,8 @@ public class Message {
     private int msg_priority;
 
 
-    @OneToMany(mappedBy = "message", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "msg_id")
     private List<Attachment> attachments = new ArrayList<>();
 
     public Message() {
@@ -72,9 +73,18 @@ public class Message {
 //        this.timestamp = new Timestamp(System.currentTimeMillis());
         this.timestamp = timestamp;
     }
+    public Message(User sender, List<User> recipients, String subject, String content, List<Attachment> attachments, Timestamp timestamp) {
+        this.sender = sender;
+        this.recipients = new ArrayList<>(recipients);
+        this.subject = subject;
+        this.content = content;
+//        this.timestamp = new Timestamp(System.currentTimeMillis());
+        this.attachments.addAll(attachments);
+        this.timestamp = timestamp;
+    }
 public Message(MessageBuilder builder) {
     this.sender = builder.sender;
-    this.recipients = builder.receivers;
+    this.recipients = builder.recipients;
     this.timestamp = builder.time;
     this.msg_priority = builder.msg_priority;
     this.subject = builder.subject;
@@ -83,16 +93,16 @@ public Message(MessageBuilder builder) {
 }
     public static class MessageBuilder {
         private User sender;
-        private List<User> receivers;
+        private List<User> recipients;
         private Timestamp time;
         private int msg_priority;
         private String subject;
         private String content;
-        private List<Attachment> attachments = new ArrayList<>();;
+        private List<Attachment> attachments = new ArrayList<>();
 
         public MessageBuilder(MessageDTO msg) {
             this.sender = msg.getSender();
-            this.receivers = msg.getRecipients();
+            this.recipients = msg.getRecipients();
             this.time = new Timestamp(System.currentTimeMillis());
             this.msg_priority = msg.getPriority();
             this.subject = msg.getSubject();
@@ -101,11 +111,8 @@ public Message(MessageBuilder builder) {
 
         public MessageBuilder withAttachments(List<Attachment> attachments) {
             this.attachments.addAll(attachments);
-
-//            this.attachments = attachments;
             return this;
         }
-
         public Message build() {
             return new Message(this);
         }

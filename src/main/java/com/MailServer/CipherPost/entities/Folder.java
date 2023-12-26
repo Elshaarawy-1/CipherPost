@@ -33,4 +33,16 @@ public class Folder {
     public Folder() {
 
     }
+
+    public String getFolderName() {
+        return folderName;
+    }
+
+    public void setFolderName(String newName) {
+        this.folderName = newName;
+    }
+
+    public User getUser() {
+        return user;
+    }
 }

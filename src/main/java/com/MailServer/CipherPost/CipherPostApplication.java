@@ -2,10 +2,7 @@ package com.MailServer.CipherPost;
 
 
 import com.MailServer.CipherPost.Services.FolderService;
-import com.MailServer.CipherPost.entities.Folder;
-import com.MailServer.CipherPost.entities.FolderMessage;
-import com.MailServer.CipherPost.entities.Message;
-import com.MailServer.CipherPost.entities.User;
+import com.MailServer.CipherPost.entities.*;
 import com.MailServer.CipherPost.repositories.FolderMessagesRepository;
 import com.MailServer.CipherPost.repositories.FolderRepository;
 import com.MailServer.CipherPost.repositories.MessageRepository;
@@ -105,6 +102,15 @@ public class CipherPostApplication {
 	@Bean
 	CommandLineRunner commandLineRunner() {
 		generateFakeUsers(50);
+		User sender = userRepository.findById(1L).get();
+		User recipient = userRepository.findById(2L).get();
+		List<User> recipients = new ArrayList<>();
+		recipients.add(recipient);
+		Attachment attachment = new Attachment("test.txt", "text/plain", "test".getBytes());
+		List<Attachment> attachments = new ArrayList<>();
+		attachments.add(attachment);
+		Message msg = new Message(sender, recipients, "Test Subject", "Test Content", attachments, new Timestamp(System.currentTimeMillis()));
+		messageRepository.save(msg);
 		return args -> {
 			System.out.println("Complete Generation");
 		};

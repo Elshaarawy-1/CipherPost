@@ -130,7 +130,7 @@ The main focus of this application is to simulate essential features found in po
 
 - **Separation of Concerns:** Repositories separate the database interaction logic from the rest of the application, improving maintainability.
 
-### 7. **Factory Design Pattern:**
+### **7. Factory Design Pattern:**
 
 ### **Usage:**
 
@@ -148,22 +148,22 @@ The main focus of this application is to simulate essential features found in po
 3. **Maintainability:**
     - If the instantiation logic or folder hierarchy changes, modifications are confined to the factory class, minimizing the impact on the rest of the system.
 
-## 5**. Implementation Details**
+## **5. Implementation Details**
 
-### 5**.1 Technologies Used**
+### **5.1 Technologies Used**
 
 - Java Spring Boot for the backend.
 - Vue.js for the frontend.
 - Spring Data JPA
 - PostgreSQL for data storage.
 
-### 5**.2 HTTP Request Types**
+### **5.2 HTTP Request Types**
 
 - POST: Used for creating new entities (e.g., sending messages, creating folders).
 - DELETE: Used for deleting entities (e.g., deleting messages, deleting folders).
 - GET: Used for retrieving data.
 
-### 5**.3 JSON Schema**
+### **5.3 JSON Schema**
 
 An efficient JSON schema is designed to store email content and metadata required for retrieving emails and their folder organizations.
 
@@ -176,7 +176,7 @@ An efficient JSON schema is designed to store email content and metadata require
 - Two modes of operation for the Inbox (Default and Priority).
 - Support for selecting multiple emails for bulk operations.
 
-## 6**. How to Run the Code**
+## **6. How to Run the Code**
 
 ### 6.1 Database (Spring JPA)
 
@@ -188,7 +188,7 @@ sudo snap install intellij-idea-ultimate --classic
 sudo apt install postgresql
 ```
 
-### 6**.2 Backend (Spring Boot)**
+### **6.2 Backend (Spring Boot)**
 
 1. Clone the repository.
 2. Navigate to the backend directory.
@@ -199,7 +199,7 @@ cd backend
 ./mvnw spring-boot:run
 ```
 
-### 6**.3 Frontend (Vue.js)**
+### **6.3 Frontend (Vue.js)**
 
 1. Navigate to the frontend directory.
 2. Install dependencies.
@@ -217,19 +217,19 @@ npm run serve
 
 1. Open the application in a web browser.
 
-## 7**. UML Diagram**
+## **7. UML Diagram**
 
 [[[[[[[[[[[[[[[[[[[[[[[[[[ UML Diagram ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
-## 8**. Design Decisions**
+## **8. Design Decisions and Assumptions**
 
-Provide insights into the design decisions made during the development process.
+[[[[[[[[[[[[[[[[[[[[[[[[[[ Assumptions ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
-## 9**. User Guide and UI Snapshots**
+## **9. User Guide and UI Snapshots**
 
 [[[[[[[[[[[[[[[[[[[[[[[[[[ User Manual and UI ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
-## 10. **Conclusion**
+## **10. Conclusion**
 
 The implementation of the Gmail clone application demonstrates the effective use of design patterns, proper HTTP request handling, and the integration of Spring Boot and Vue.js. The application meets the specified requirements and provides a user-friendly interface for managing emails, attachments, and contacts. The clean and organized code ensures maintainability and extensibility in the future.
 

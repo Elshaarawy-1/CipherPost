@@ -49,6 +49,33 @@ public class MessageDTO {
         this.attachments = attachments;
     }
 
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setMsg_priority(int msg_priority) {
+        this.msg_priority = msg_priority;
+    }
+
+    public void setRecipients(List<User> recipients) {
+        this.recipients = recipients;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public void setSubject(String subject) {
+        this.subject = subject;
+    }
+
+    public void setTime(Timestamp time) {
+        this.time = time;
+    }
+
+    public int getMsg_priority() {
+        return msg_priority;
+    }
 }
 
 

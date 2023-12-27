@@ -7,11 +7,11 @@ import java.util.List;
 
 @Component
 public class ContactDTO {
-    public int contact_id;
-    public String nickname;
-    public List<String> usernames;
+    private Long contact_id;
+    private String nickname;
+    private List<String> usernames;
 
-    public int getContact_id() {
+    public Long getContact_id() {
         return contact_id;
     }
 
@@ -25,5 +25,17 @@ public class ContactDTO {
 
     public List<String> getContact_usernames() {
         return usernames;
+    }
+
+    public void setContact_id(Long contact_id) {
+        this.contact_id = contact_id;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void setUsernames(List<String> usernames) {
+        this.usernames = usernames;
     }
 }

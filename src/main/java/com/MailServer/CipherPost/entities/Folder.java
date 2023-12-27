@@ -45,4 +45,8 @@ public class Folder {
     public User getUser() {
         return user;
     }
+
+    public Long getId() {
+        return id;
+    }
 }

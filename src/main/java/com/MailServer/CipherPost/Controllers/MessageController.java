@@ -1,14 +1,17 @@
 package com.MailServer.CipherPost.Controllers;
 
-import com.MailServer.CipherPost.Commands.Messages.DeleteMessage;
-import com.MailServer.CipherPost.Facades.MessageFacade;
-import com.MailServer.CipherPost.entities.Attachment;
-import com.MailServer.CipherPost.entities.Folder;
-import com.MailServer.CipherPost.entities.Message;
 import com.MailServer.CipherPost.Commands.Command;
+import com.MailServer.CipherPost.Commands.Contacts.GetContacts;
 import com.MailServer.CipherPost.Commands.Messages.ComposeMessage;
+import com.MailServer.CipherPost.Commands.Messages.DeleteMessage;
+import com.MailServer.CipherPost.Commands.Messages.GetMessages;
 import com.MailServer.CipherPost.DTOs.MessageDTO;
-import com.MailServer.CipherPost.entities.User;
+import com.MailServer.CipherPost.Facades.FolderFacade;
+import com.MailServer.CipherPost.Facades.MessageFacade;
+import com.MailServer.CipherPost.entities.Contact;
+import com.MailServer.CipherPost.entities.Folder;
+import com.MailServer.CipherPost.entities.FolderMessage;
+import com.MailServer.CipherPost.entities.Message;
 import com.MailServer.CipherPost.repositories.FolderRepository;
 import com.MailServer.CipherPost.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +23,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*" )
+@RequestMapping("/api/messages")
 public class MessageController {
     @Autowired
     MessageFacade messageFacade;
     @Autowired
+    FolderFacade folderFacade;
+    @Autowired
     FolderRepository folderRepository;
     @Autowired
-
     MessageRepository messageRepository;
     @PostMapping("/send")
     public ResponseEntity<Void> sendMessage(@RequestBody MessageDTO message) {
@@ -37,27 +41,30 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @DeleteMapping("/delete/{folder_id}")
-    public ResponseEntity<Void> deleteMessage(@RequestBody int[] msg_ids, @PathVariable("folder_id") Long folder_id) {
+    @DeleteMapping("/delete/{folder_id}/{msg_id}")
+    public ResponseEntity<Void> deleteMessage(@PathVariable("msg_id") Long msg_id, @PathVariable("folder_id") Long folder_id) {
         Folder folder = folderRepository.findById(folder_id).orElse(null);
-        if (folder == null) {
+        Message delete_msg = messageRepository.findById(msg_id).orElse(null);
+        if (folder == null || delete_msg == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } else {
-            for (int msg_id : msg_ids) {
-                Message delete_msg = messageRepository.findById((long) msg_id).orElse(null);
-
-                if (delete_msg == null) {
-                    continue;
-                }
-                try {
-                    Command<Void> deleteCommand = new DeleteMessage(messageFacade, delete_msg, folder);
-                    deleteCommand.execute();
-                } catch (Exception e) {
-                    // Log the exception or handle the case where message deletion fails
-                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-                }
-            }
-            return ResponseEntity.status(HttpStatus.CREATED).build();
+            Command<Void> deleteCommand = new DeleteMessage(messageFacade, delete_msg, folder);
+            deleteCommand.execute();
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    @GetMapping("/get/{folder_id}")
+    public List<FolderMessage> getMessages(
+            @PathVariable("folder_id") Long folder_id,
+            @RequestParam(defaultValue = "message.timestamp") String sortField,
+            @RequestParam(defaultValue = "") String contentSearch
+    ) {
+        Folder folder = folderRepository.findById(folder_id).orElse(null);
+        if (folder == null) {
+            return (List<FolderMessage>) ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        } else {
+            Command<List<FolderMessage>> getCommand = new GetMessages(folderFacade, folder, contentSearch, sortField);
+            return getCommand.execute();
         }
     }
 }

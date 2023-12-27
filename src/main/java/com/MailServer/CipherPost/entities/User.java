@@ -2,6 +2,9 @@ package com.MailServer.CipherPost.entities;
 
 
 import jakarta.persistence.*;
+import org.springframework.stereotype.Component;
+
+@Component
 @Entity(name = "users")
 public class User {
     @Id

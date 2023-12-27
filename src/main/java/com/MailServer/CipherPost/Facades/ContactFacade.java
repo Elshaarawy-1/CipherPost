@@ -17,13 +17,28 @@ public class ContactFacade {
     @Autowired
     ContactService contactService;
     public void saveContact(User user, Contact contact) {
-        contact.setUser(user);
         contactService.saveContact(user, contact);
     }
-    private void deleteContact(Contact contact) {
+    public void deleteContact(Contact contact) {
         contactService.deleteContact(contact);
     }
-    private void updateContact(Contact contact) {
+    public void updateContact(Contact contact) {
         contactService.updateContact(contact);
+    }
+    public Contact getContactById(Long contact_id) {
+        return contactService.getContactById(contact_id);
+    }
+    public List<Contact> getContactByUserId(Long user_id) {
+        return contactService.getContactByUserId(user_id);
+    }
+    public List<Contact> getSortedContactsByUserId(Long user_id) {
+        return contactService.getSortedContactsByUserId(user_id);
+    }
+    public List <Contact> getContactByUserIdAndNicknameContainingIgnoreCase(Long user_id, String nickname) {
+        return contactService.getContactByUserIdAndNicknameContainingIgnoreCase(user_id, nickname);
+    }
+
+    public List<Contact> getContacts(User user) {
+        return contactService.getContactByUserId(user.getId());
     }
 }

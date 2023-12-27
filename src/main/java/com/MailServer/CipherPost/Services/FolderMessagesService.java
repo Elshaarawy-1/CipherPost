@@ -27,6 +27,10 @@ public class FolderMessagesService {
 
         return folderMessagesRepository.findByFolder(folder, pageable);
     }
+    public Page<FolderMessage> getPaginatedMessagesWithSortingAndSearch(Folder folder, int offset, int pageSize, String sortByField, String searchByContent) {
+        Pageable pageable = PageRequest.of(offset, pageSize, Sort.by(sortByField));
+        return folderMessagesRepository.findByFolderAndMessage_ContentContaining(folder, searchByContent, pageable);
+    }
     public Page<FolderMessage> searchMessagesInFolder(Folder folder, String keyword, int offset, int pageSize, String sortByField) {
         Pageable pageable = PageRequest.of(offset, pageSize, Sort.by(sortByField));
         return folderMessagesRepository.findByFolderAndMessage_ContentContaining(folder, keyword, pageable);

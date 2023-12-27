@@ -20,14 +20,15 @@ public interface FolderMessagesRepository extends JpaRepository<FolderMessage, L
     List<FolderMessage> findByFolder_FolderNameAndAddTimeBefore(String folderName, Timestamp thirtyDaysAgo);
     Page<FolderMessage> findByFolder(Folder folder, Pageable pageable);
 
+    FolderMessage findByFolderAndMessage(Folder source, Message msg);
 
-    //Not Tested yet Next four
-//    Page<FolderMessage> findByMessage_Content(String content, Pageable pageable);
-//    Page<FolderMessage> findByMessage_Content
     Page<FolderMessage> findByFolderAndMessage_ContentContainingIgnoreCase(Folder folder, String search, Pageable pageable);
-//    Page<FolderMessage> findByFolderAndMessage_Sender(Folder folder, User user, Pageable pageable);
 
     Page<FolderMessage> findByFolderAndMessage_ContentContaining(Folder folder, String keyword, Pageable pageable);
 
-    FolderMessage findByFolderAndMessage(Folder source, Message msg);
+    Page<FolderMessage> findByFolderAndMessage_Sender_UsernameContainingIgnoreCase(Folder messageFolder, String searchInput, Pageable pageable);
+
+    Page<FolderMessage> findByFolderAndMessage_SubjectContainingIgnoreCase(Folder messageFolder, String searchInput, Pageable pageable);
+
+    Page<FolderMessage> findByFolderAndMessage_Recipients_UsernameContainingIgnoreCase(Folder messageFolder, String searchInput, Pageable pageable);
 }

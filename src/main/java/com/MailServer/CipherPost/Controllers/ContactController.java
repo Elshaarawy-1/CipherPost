@@ -1,9 +1,19 @@
 package com.MailServer.CipherPost.Controllers;
 
+import com.MailServer.CipherPost.Commands.Command;
+import com.MailServer.CipherPost.Commands.Contacts.*;
+import com.MailServer.CipherPost.Commands.Messages.ComposeMessage;
+import com.MailServer.CipherPost.Facades.ContactFacade;
+import com.MailServer.CipherPost.Services.ContactService;
+import com.MailServer.CipherPost.Services.UserService;
+import com.MailServer.CipherPost.entities.Contact;
 import com.MailServer.CipherPost.entities.Folder;
 import com.MailServer.CipherPost.DTOs.ContactDTO;
 import com.MailServer.CipherPost.DTOs.FolderDTO;
 import com.MailServer.CipherPost.DTOs.MessageDTO;
+import com.MailServer.CipherPost.entities.User;
+import com.MailServer.CipherPost.repositories.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,27 +21,71 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@CrossOrigin(origins = "*/api/contacts" )
+@RequestMapping("/api/contacts")
 public class ContactController {
-    @PostMapping("/add")
-    public ResponseEntity<Void> addContact(@RequestBody ContactDTO new_contact) {
+    @Autowired
+    UserService userService;
+    @Autowired
+    ContactService contactService;
+    @Autowired
+    ContactFacade contactFacade;
+    @GetMapping("/get/{user_id}")
+    public List<Contact> getContacts(@PathVariable Long user_id){
+        User user = userService.getUserById(user_id);
+        Command<List<Contact>> getCommand = new GetContacts(contactFacade, user);
+        return getCommand.execute();
+    }
+
+    @PostMapping("/add/{user_id}")
+    public ResponseEntity<Void> addContact(@RequestBody ContactDTO new_contact, @PathVariable("user_id") Long user_id) {
+        User user = userService.getUserById(user_id);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        else {
+            Contact contact = new Contact(user, new_contact);
+            Command<Void> addCommand = new AddContact(contactFacade, contact, user);
+            addCommand.execute();
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    @GetMapping("/delete")
-    public ResponseEntity<Void> deleteContact(@PathVariable int contact_id) {
+    @GetMapping("/delete/{contact_id}")
+    public ResponseEntity<Void> deleteContact(@PathVariable Long contact_id) {
+        Contact contact = contactService.getContactById(contact_id);
+        if (contact == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        else {
+            Command<Void> deleteCommand = new DeleteContact(contactFacade, contact);
+            deleteCommand.execute();
+        }
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
-    @PostMapping("/sort")
-    public List<MessageDTO> sortContacts(@RequestBody FolderDTO current_folder, @RequestBody String criteria) {
-        return null;
-    }
-    @PostMapping("/search")
-    public List<MessageDTO> searchContacts(@RequestBody FolderDTO current_folder, @RequestBody String search_input) {
-        return null;
-    }
-    @PostMapping("/edit")
-    public ResponseEntity<Void> editContact(@RequestBody ContactDTO updated_contact) {
+    @GetMapping("/edit/{contact_id}")
+    public ResponseEntity<Void> editContact(@PathVariable Long contact_id, @RequestBody ContactDTO updated_contact) {
+        Contact contact = contactService.getContactById(contact_id);
+        if (contact == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        else {
+            Command<Void> editCommand = new EditContact(contactFacade, contact, updated_contact);
+            editCommand.execute();
+        }
         return ResponseEntity.status(HttpStatus.CREATED).build();
+
     }
+    @PostMapping("/sort/{user_id}")
+    public List<Contact> sortContacts(@PathVariable Long user_id){
+        User user = userService.getUserById(user_id);
+        Command<List<Contact>> sortCommand = new SortContacts(contactFacade, user);
+        return sortCommand.execute();
+    }
+    @GetMapping("/search/{user_id}")
+    public List<Contact> searchContacts(@PathVariable Long user_id, @RequestParam String search){
+        User user = userService.getUserById(user_id);
+        Command<List<Contact>> searchCommand = new SearchContact(contactFacade, user, search);
+        return searchCommand.execute();
+    }
+
 }

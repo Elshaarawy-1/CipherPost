@@ -7,7 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@CrossOrigin(origins = "*/api/folders" )
+@RequestMapping("/api/folders")
 public class FolderController {
 
     @PostMapping("/create")

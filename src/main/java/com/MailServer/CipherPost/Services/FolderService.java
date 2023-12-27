@@ -1,9 +1,6 @@
 package com.MailServer.CipherPost.Services;
 
-import com.MailServer.CipherPost.entities.Folder;
-import com.MailServer.CipherPost.entities.FolderMessage;
-import com.MailServer.CipherPost.entities.Message;
-import com.MailServer.CipherPost.entities.User;
+import com.MailServer.CipherPost.entities.*;
 import com.MailServer.CipherPost.repositories.FolderMessagesRepository;
 import com.MailServer.CipherPost.repositories.FolderRepository;
 import com.MailServer.CipherPost.repositories.UserRepository;
@@ -73,5 +70,25 @@ public class FolderService {
             folderMessagesRepository.save(folderMessage);
         }
 
+    }
+
+    public void searchMessages(Folder messageFolder, String criteria, String searchInput) {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("addTime").descending());
+        Page<FolderMessage> folderMessages = switch (criteria) {
+            case "content" ->
+                    folderMessagesRepository.findByFolderAndMessage_ContentContainingIgnoreCase(messageFolder, searchInput, pageable);
+            case "sender" ->
+                    folderMessagesRepository.findByFolderAndMessage_Sender_UsernameContainingIgnoreCase(messageFolder, searchInput, pageable);
+            case "recipients" ->
+                    folderMessagesRepository.findByFolderAndMessage_Recipients_UsernameContainingIgnoreCase(messageFolder, searchInput, pageable);
+            default -> folderMessagesRepository.findByFolderAndMessage_SubjectContainingIgnoreCase(messageFolder, searchInput, pageable);
+
+        };
+        System.out.println(folderMessages.getContent());
+    }
+
+    public List<FolderMessage> getMessages(Folder folder) {
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("addTime").descending());
+        return folderMessagesRepository.findByFolder(folder, pageable).getContent();
     }
 }

@@ -141,4 +141,11 @@ public Message(MessageBuilder builder) {
         return attachments;
     }
 
+    public String getSubject() {
+        return subject;
+    }
+
+    public int getMsg_priority() {
+        return msg_priority;
+    }
 }

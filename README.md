@@ -130,23 +130,23 @@ The main focus of this application is to simulate essential features found in po
 
 - **Separation of Concerns:** Repositories separate the database interaction logic from the rest of the application, improving maintainability.
 
-### **7. Factory Design Pattern:**
+### **7. Adapter Design Pattern:**
 
 ### **Usage:**
 
-- **Class:** **`FolderFactory`**
-- **Purpose:** The **`FolderFactory`** class encapsulates the logic for creating different types of **`Folder`** objects based on the provided **`folder_name`**.
+- **Classes:** **`MessageAdapter`**, **`FolderAdapter`**, **`ContactAdapter`**
+- **Purpose:** Adapters (MessageAdapter, FolderAdapter, ContactAdapter) are employed to convert internal classes (Message, Folder, Contact) to Data Transfer Objects (DTOs).
+- **Explanation:** Adapters encapsulate the conversion logic, translating the internal structure of classes into a format suitable for external use. This promotes separation of concerns and maintains a clean interface between internal and external components.
 
 ### **Benefits:**
 
-1. **Encapsulation of Object Creation Logic:**
-    - The factory centralizes the creation logic for different types of folders, hiding the instantiation details from the client code.
-    - Clients only need to interact with the factory, not worrying about the specific class instantiation process.
-2. **Flexibility:**
-    - The factory allows for easy extension by adding new folder types without modifying existing client code.
-    - It promotes flexibility in adapting to changes or additions in the folder hierarchy.
-3. **Maintainability:**
-    - If the instantiation logic or folder hierarchy changes, modifications are confined to the factory class, minimizing the impact on the rest of the system.
+- **Decoupling:** Adapters decouple internal classes from their external representations (DTOs), allowing changes in one without affecting the other. This enhances modularity and system maintainability.
+
+- **Flexibility:** Adapters provide flexibility, accommodating changes in internal class structures or DTO requirements. This ensures adaptability to evolving system needs.
+
+- **Reusability:** Once defined, adapters can be reused across different parts of the system where similar conversions are needed. This reduces redundancy and promotes consistency in data transformation.
+
+- **Readability:** Adapters enhance code readability by offering a standardized approach to data conversion. This clarity contributes to a more comprehensible and maintainable codebase.
 
 ## **5. Implementation Details**
 

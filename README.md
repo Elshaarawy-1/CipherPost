@@ -1,1 +1,1 @@
-# CipherPost
+# VaultMail

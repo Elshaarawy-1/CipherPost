@@ -12,19 +12,19 @@ public class FolderController {
 
     @PostMapping("/create")
     public ResponseEntity<Void> createFolder(@RequestBody FolderDTO new_folder) {
-        // creating folder, takes folderDTO description to be created, returns void response
+        // TODO: creating folder, takes folderDTO description to be created, returns void response
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PostMapping("/rename")
     public ResponseEntity<Void> renameFolder(@RequestBody FolderDTO folder, @RequestBody String new_name) {
-        // creating folder, takes folderDTO to be renamed, new name, returns void response
+        // TODO: creating folder, takes folderDTO to be renamed, new name, returns void response
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/delete/{folder_id}")
     public ResponseEntity<Void> deleteFolder(@PathVariable int folder_id) {
-        // creating folder, takes folder id to be deleted, new name, returns void response
+        // TODO: creating folder, takes folder id to be deleted, new name, returns void response
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

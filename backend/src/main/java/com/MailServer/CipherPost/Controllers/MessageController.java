@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 @RestController
 @RequestMapping("/api/messages")
@@ -74,15 +75,22 @@ public class MessageController {
         }
     }
 
-    @DeleteMapping("/delete/{folder_id}/{msg_id}")
-    public ResponseEntity<Void> deleteMessage(@PathVariable("msg_id") Long msg_id, @PathVariable("folder_id") Long folder_id) {
+
+    @DeleteMapping("/delete/{folder_id}")
+    public ResponseEntity<Void> deleteMessage(@RequestParam("msg_ids") List<Long> msg_ids, @PathVariable("folder_id") Long folder_id) {
         Folder folder = folderRepository.findById(folder_id).orElse(null);
-        Message delete_msg = messageRepository.findById(msg_id).orElse(null);
-        if (folder == null || delete_msg == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-        } else {
-            Command<Void> deleteCommand = new DeleteMessage(messageFacade, delete_msg, folder);
-            deleteCommand.execute();
+        Queue<Command<Void>> cmd_queue = new LinkedList<>();
+        for (Long id : msg_ids) {
+            Message delete_msg = messageRepository.findById(id).orElse(null);
+            if (folder == null || delete_msg == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            } else {
+                cmd_queue.add(new DeleteMessage(messageFacade, delete_msg, folder));
+            }
+        }
+        while(!cmd_queue.isEmpty()){
+            Command<Void> curr_cmd = cmd_queue.poll();
+            curr_cmd.execute();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
@@ -113,22 +121,28 @@ public class MessageController {
             return req_msgs;
         }
     }
-    @GetMapping("/move/{folder_id}/{msg_id}/{newFolderName}")
-    public ResponseEntity<Void> moveMessage(@PathVariable("msg_id") Long msg_id, @PathVariable("folder_id") Long folder_id, @PathVariable("newFolderName") String newFolderName) {
+    @GetMapping("/move/{folder_id}/{newFolderName}")
+    public ResponseEntity<Void> moveMessage(@RequestParam("msg_ids") List<Long> msg_ids, @PathVariable("folder_id") Long folder_id, @PathVariable("newFolderName") String newFolderName) {
         Folder folder = folderRepository.findById(folder_id).orElse(null);
-        Message move_msg = messageRepository.findById(msg_id).orElse(null);
-        if (folder != null && move_msg != null) {
-            Folder new_folder = folderRepository.findByFolderNameAndUser(newFolderName, folder.getUser());
-            if (new_folder == null) {
-                new_folder = new Folder(folder.getUser(), newFolderName);
-            }
-            Command<Void> moveCommand = new MoveMessage(messageFacade, move_msg, folder, new_folder);
-            moveCommand.execute();
+        Queue<Command<Void>> cmd_queue = new LinkedList<>();
+        for (Long msg_id : msg_ids) {
+            Message move_msg = messageRepository.findById(msg_id).orElse(null);
+            if (folder != null && move_msg != null) {
+                Folder new_folder = folderRepository.findByFolderNameAndUser(newFolderName, folder.getUser());
+                if (new_folder == null) {
+                    new_folder = new Folder(folder.getUser(), newFolderName);
+                }
+                cmd_queue.add(new MoveMessage(messageFacade, move_msg, folder, new_folder));
 
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
         }
-        else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        while (!cmd_queue.isEmpty()){
+            Command<Void> curr_cmd=cmd_queue.poll();
+            curr_cmd.execute();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
+
     }
 }

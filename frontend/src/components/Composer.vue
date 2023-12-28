@@ -27,6 +27,10 @@
 </template>
 
 <script>
+import MessageDTO from '../../src/MessageDTO';
+import User from '../../src/User';
+import Attachment from '../../src/Attachment';
+import axios from 'axios';
 export default {
     data(){
         return{
@@ -34,6 +38,9 @@ export default {
             attachements: [],
             att_count: 0,
             isDropdown: false,
+            recipients: "",
+            msg_subject: "",
+            msg_priority: 1,// TODO: change this to v-model like the rest
         }
     },
     mounted() {
@@ -57,8 +64,19 @@ export default {
         },
         handleFileChange(event){
             const file= event.target.files[0];
-            this.attachements.push(file);
-            this.att_count++;
+            
+            let file_name = file.name; // Save the filename with extension
+             // Extract file extension
+            let fileExtension = file_name.split('.').pop(); // Get the last part after the last dot
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onload = () => {
+                base64String = reader.result.split(',')[1];
+                fileExtension = fileExtension.toLowerCase(); // Save the extension in a variable
+                this.attachements.push(new Attachment(file_name,fileExtension,base64String));
+                this.att_count++;            
+            };
+
         },
         formatFileSize(size){
             const kbSize = size/1024;
@@ -84,10 +102,38 @@ export default {
             this.attachements.splice(index, 1)
         },
         send() {
+            // TODO: send message
+            let sender_id = 1//TODO: change this to actual user id
+            let sender_username = "duncan.runolfsdottir"//TODO:change this to actual username
+            let sender = new User(sender_username,sender_id);
+        
+            let recipients_arr = this.recipients.split(' ');
+            if (recipients_arr.length === 1 && recipients_arr[0]===""){
+                console.log('ERROR! No recipients.')
+                return;
+            }
+            let msg_dto = new MessageDTO(0,sender,recipients_arr, Date.now(),this.msg_priority,this.subject,this.mail_message,this.attachements,null); 
+            this.requestSendMessage(msg_dto);  
+        },
+        async requestSendMessage(messageDTO){
+            const url = 'http://192.168.1.76:8081/api/messages/send'; // Replace with your actual API endpoint
+            console.log(messageDTO);
+            try {
+            const response = await axios.post(url, messageDTO);
+
+            console.log('Message sent successfully:', response.data);
+            this.$emit('close_composer')
+
+            return response.data;
+            } catch (error) {
+                console.error('Error sending message:', error.message);
+            throw error;
+            }
 
         },
         discard(){
-
+            // TODO: differentiate between discard message(inside box event) and save to draft(outside event)
+            this.$emit('close_composer')
         }
     }
 }

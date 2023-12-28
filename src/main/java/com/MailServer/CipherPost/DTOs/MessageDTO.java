@@ -9,6 +9,7 @@ import com.MailServer.CipherPost.entities.User;
 public class MessageDTO {
     private User sender;
     private List<String> recipients;
+    private List<String> CC_recipients;
     private Timestamp time;
     private int msg_priority;
     private String subject;
@@ -22,6 +23,10 @@ public class MessageDTO {
 
     public List<String> getRecipients() {
         return this.recipients;
+    }
+
+    public List<String> getCC_recipients() {
+        return CC_recipients;
     }
 
     public Timestamp getTime() {
@@ -76,6 +81,10 @@ public class MessageDTO {
 
     public int getMsg_priority() {
         return msg_priority;
+    }
+
+    public void setCC_recipients(List<String> CC_recipients) {
+        this.CC_recipients = CC_recipients;
     }
 }
 

@@ -19,18 +19,6 @@ import java.util.List;
 public class FolderMessagesService {
     @Autowired
     private FolderMessagesRepository folderMessagesRepository;
-//    public Page<FolderMessage> getPaginatedMessages(Folder folder, int offset, int pageSize) {
-//        return folderMessagesRepository.findByFolder(folder, PageRequest.of(offset, pageSize));
-//    }
-//    public Page<FolderMessage> getPaginatedMessagesWithSorting(Folder folder, int offset, int pageSize, String sortByField) {
-//        Pageable pageable = PageRequest.of(offset, pageSize, Sort.by(sortByField));
-//
-//        return folderMessagesRepository.findByFolder(folder, pageable);
-//    }
-//    public Page<FolderMessage> getPaginatedMessagesWithSortingAndSearch(Folder folder, int offset, int pageSize, String sortByField, String searchByContent) {
-//        Pageable pageable = PageRequest.of(offset, pageSize, Sort.by(sortByField));
-//        return folderMessagesRepository.findByFolderAndMessage_ContentContaining(folder, searchByContent, pageable);
-//    }
     public Page<FolderMessage> getPaginatedMessagesWithSortingAndSearch(Folder folder, Pageable page, String searchField, String keyword) {
 
         return switch (searchField) {

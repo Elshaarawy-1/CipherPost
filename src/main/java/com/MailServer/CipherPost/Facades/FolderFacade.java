@@ -13,15 +13,6 @@ public class FolderFacade {
     FolderMessagesService folderMessagesService;
     @Autowired
     FolderService folderService;
-    public void changeMessageFolder(List<Message> selected_msg, Folder source, Folder destination) {
-        folderMessagesService.changeMessageFolder(selected_msg, source, destination);
-    }
-    public void deleteFolder(Folder folder) {
-        folderService.deleteFolder(folder);
-    }
-    public void renameFolder(Folder old_folder, String new_name) {
-        folderService.renameFolder(old_folder, new_name);
-    }
     public void createFolder(User user, String name) {
         folderService.createFolder(user, name);
     }
@@ -36,7 +27,6 @@ public class FolderFacade {
             folderService.deleteFolder(folder);
         }
     }
-
     public void deleteFolderByUserAndFolderId(User user, Long folderId) {
         Folder folder = folderService.getFolderByIdAndUser(folderId, user);
         if (folder != null) {

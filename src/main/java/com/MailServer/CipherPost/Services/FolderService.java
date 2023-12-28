@@ -19,7 +19,6 @@ public class FolderService {
     private FolderRepository folderRepository;
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private FolderMessagesRepository folderMessagesRepository;
 
@@ -43,6 +42,9 @@ public class FolderService {
     }
 
     public void deleteFolder(Folder folder) {
+        if (folder.getFolderName().equals("inbox") || folder.getFolderName().equals("sent") || folder.getFolderName().equals("drafts") || folder.getFolderName().equals("trash")) {
+            return;
+        }
         folderRepository.delete(folder);
     }
 

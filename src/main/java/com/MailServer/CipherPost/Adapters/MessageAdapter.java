@@ -20,6 +20,10 @@ public class MessageAdapter implements Adapter<Message, MessageDTO> {
         for (User user : message.getRecipients()) {
             messageDTO.getRecipients().add(user.getUsername());
         }
+        messageDTO.setCC_recipients(new LinkedList<>());
+        for (User user : message.getCC_recipients()) {
+            messageDTO.getCC_recipients().add(user.getUsername());
+        }
         messageDTO.setTime(message.getTimestamp());
         messageDTO.setMsg_priority(message.getMsg_priority());
         messageDTO.setSubject(message.getSubject());

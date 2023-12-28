@@ -219,20 +219,17 @@ npm run serve
 
 ## **7. UML Diagram**
 
-[[[[[[[[[[[[[[[[[[[[[[[[[[ UML Diagram ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+![UML Class Diagram - Mail Server](./markdown/UML%20Class%20Diagram%20-%20Mail%20Server.png)
 
-## **8. Design Decisions and Assumptions**
 
-[[[[[[[[[[[[[[[[[[[[[[[[[[ Assumptions ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-
-## **9. User Guide and UI Snapshots**
+## **8. User Guide and UI Snapshots**
 
 [[[[[[[[[[[[[[[[[[[[[[[[[[ User Manual and UI ]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 
-## **10. Conclusion**
+## **9. Conclusion**
 
 The implementation of the Gmail clone application demonstrates the effective use of design patterns, proper HTTP request handling, and the integration of Spring Boot and Vue.js. The application meets the specified requirements and provides a user-friendly interface for managing emails, attachments, and contacts. The clean and organized code ensures maintainability and extensibility in the future.
 
-## **11. References**
+## **10. References**
 
 - [https://docs.spring.io/spring-data/jpa/reference/index.html](https://docs.spring.io/spring-data/jpa/reference/index.html)

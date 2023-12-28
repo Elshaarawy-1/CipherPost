@@ -13,24 +13,31 @@ public class FolderFacade {
     FolderMessagesService folderMessagesService;
     @Autowired
     FolderService folderService;
-    public void changeMessageFolder(List<Message> selected_msg, Folder source, Folder destination) {
-        folderMessagesService.changeMessageFolder(selected_msg, source, destination);
-    }
-    public void deleteFolder(Folder folder) {
-        folderService.deleteFolder(folder);
-    }
-    public void renameFolder(Folder old_folder, String new_name) {
-        folderService.renameFolder(old_folder, new_name);
-    }
     public void createFolder(User user, String name) {
         folderService.createFolder(user, name);
     }
 
-//    public List<FolderMessage> getMessages(Folder folder) {
-//        return folderMessagesService.getPaginatedMessages(folder, 0, 10).getContent();
-//    }
+    public List<Folder> getFolders(User user) {
+        return folderService.getFolders(user);
+    }
 
-//    public List<FolderMessage> getMessages(Folder folder, String contentSearch, String sortField) {
-//        return folderMessagesService.getPaginatedMessagesWithSortingAndSearch(folder, 0, 10, sortField, contentSearch).getContent();
-//    }
+    public void deleteFolderByName(User user, String folderName) {
+        Folder folder = folderService.getFolderByNameAndUser(folderName, user);
+        if (folder != null) {
+            folderService.deleteFolder(folder);
+        }
+    }
+    public void deleteFolderByUserAndFolderId(User user, Long folderId) {
+        Folder folder = folderService.getFolderByIdAndUser(folderId, user);
+        if (folder != null) {
+            folderService.deleteFolder(folder);
+        }
+    }
+
+    public void renameFolder(User user, Long folder_id, String newName) {
+        Folder folder = folderService.getFolderByIdAndUser(folder_id, user);
+        if (folder != null) {
+            folderService.renameFolder(folder, newName);
+        }
+    }
 }

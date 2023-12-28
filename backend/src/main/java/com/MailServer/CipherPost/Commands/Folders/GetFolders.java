@@ -1,21 +1,20 @@
 package com.MailServer.CipherPost.Commands.Folders;
 
 import com.MailServer.CipherPost.Facades.FolderFacade;
+import com.MailServer.CipherPost.entities.Folder;
 import com.MailServer.CipherPost.entities.User;
 
+import java.util.List;
 
-public class CreateFolder implements FolderCommand<Void> {
+public class GetFolders implements FolderCommand<List<Folder>> {
     private final FolderFacade folderFacade;
     private final User user;
-    private final String folder_name;
-    public CreateFolder(FolderFacade folderFacade, User user, String folder_name) {
+    public GetFolders(FolderFacade folderFacade, User user) {
         this.folderFacade = folderFacade;
         this.user = user;
-        this.folder_name = folder_name;
     }
     @Override
-    public Void execute() {
-        folderFacade.createFolder(user, folder_name);
-        return null;
+    public List<Folder> execute() {
+        return folderFacade.getFolders(user);
     }
 }

@@ -17,9 +17,8 @@ public class ContactAdapter implements Adapter<Contact,ContactDTO>{
     }
     public List<ContactDTO> toListDTO(List<Contact> contacts) {
         List<ContactDTO> contacts_dto = new LinkedList<>();
-        ContactAdapter adapter = new ContactAdapter();
         for (Contact contact : contacts){
-            contacts_dto.add(adapter.toDto(contact));
+            contacts_dto.add(this.toDto(contact));
         }
         return contacts_dto;
     }

@@ -1,9 +1,7 @@
 package com.MailServer.CipherPost.Commands.Contacts;
 
-import com.MailServer.CipherPost.DTOs.ContactDTO;
 import com.MailServer.CipherPost.Facades.ContactFacade;
 import com.MailServer.CipherPost.entities.Contact;
-import com.MailServer.CipherPost.entities.User;
 import org.springframework.stereotype.Component;
 
 @Component

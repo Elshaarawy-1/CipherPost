@@ -1,6 +1,7 @@
 package com.MailServer.CipherPost.entities;
 
 
+import com.MailServer.CipherPost.DTOs.FolderDTO;
 import jakarta.persistence.*;
 
 @Entity(name = "folders")
@@ -32,6 +33,13 @@ public class Folder {
 
     public Folder() {
 
+    }
+    public Folder(FolderDTO dto) {
+        this.folderName=dto.getFolderName();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getFolderName() {

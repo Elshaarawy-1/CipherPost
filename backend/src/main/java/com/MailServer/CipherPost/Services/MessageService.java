@@ -32,7 +32,7 @@ public class MessageService implements MessageObserver {
     @Override
     public void update(Message message) {
         saveMessage(message);
-        saveMessageForRecipients(message);
+        saveMessageForRecipientsAndCC_recipients(message);
         saveMessageForSender(message);
     }
 
@@ -40,8 +40,12 @@ public class MessageService implements MessageObserver {
         messageRepository.save(message);
     }
 
-    private void saveMessageForRecipients(Message message) {
+    private void saveMessageForRecipientsAndCC_recipients(Message message) {
         for (User recipient : message.getRecipients()) {
+            Folder userFolder = getUserFolderByUser("inbox", recipient);
+            saveMessageToUserFolder(message, userFolder);
+        }
+        for (User recipient : message.getCC_recipients()) {
             Folder userFolder = getUserFolderByUser("inbox", recipient);
             saveMessageToUserFolder(message, userFolder);
         }

@@ -8,6 +8,7 @@ import com.MailServer.CipherPost.entities.FolderMessage;
 import com.MailServer.CipherPost.entities.Message;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +32,7 @@ public class MessageFacade {
     public void moveMessageToFolder(Message msg, Folder source, Folder destination) {
         folderService.moveMessageToFolder(msg, source, destination);
     }
-    public Page<FolderMessage> getMessages(Folder folder, String sortField, Sort.Direction direction, String searchField, String keyword) {
-        return folderMessagesService.getPaginatedMessagesWithSortingAndSearch(folder, 0, 10, sortField, direction, searchField, keyword);
+    public Page<FolderMessage> getMessages(Folder folder, Pageable pageable, String searchField, String keyword) {
+        return folderMessagesService.getPaginatedMessagesWithSortingAndSearch(folder, pageable, searchField, keyword);
     }
 }

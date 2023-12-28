@@ -28,6 +28,7 @@ import com.MailServer.CipherPost.Facades.MessageFacade;
 import com.MailServer.CipherPost.entities.Folder;
 import com.MailServer.CipherPost.entities.FolderMessage;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -36,23 +37,21 @@ public class GetMessages implements MessageCommand<Page<FolderMessage>>{
     private final MessageFacade messageFacade;
     private final Folder folder;
     private final String searchField;
-    private final String sortField;
     private final String keyword;
-    private final Sort.Direction direction;
+    private final Pageable pageable;
 
 
-    public GetMessages(MessageFacade messageFacade, Folder folder, String sortField, Sort.Direction direction, String searchField, String keyword) {
+    public GetMessages(MessageFacade messageFacade, Folder folder, Pageable pageable, String searchField, String keyword) {
         this.messageFacade = messageFacade;
         this.folder = folder;
-        this.sortField = sortField;
-        this.direction = direction;
+        this.pageable = pageable;
         this.searchField = searchField;
         this.keyword = keyword;
     }
 
     public Page<FolderMessage> execute()
     {
-        return messageFacade.getMessages(folder, sortField, direction, searchField, keyword);
+        return messageFacade.getMessages(folder, pageable, searchField, keyword);
 
     }
 }

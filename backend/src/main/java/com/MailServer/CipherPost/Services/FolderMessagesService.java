@@ -19,31 +19,16 @@ import java.util.List;
 public class FolderMessagesService {
     @Autowired
     private FolderMessagesRepository folderMessagesRepository;
-//    public Page<FolderMessage> getPaginatedMessages(Folder folder, int offset, int pageSize) {
-//        return folderMessagesRepository.findByFolder(folder, PageRequest.of(offset, pageSize));
-//    }
-//    public Page<FolderMessage> getPaginatedMessagesWithSorting(Folder folder, int offset, int pageSize, String sortByField) {
-//        Pageable pageable = PageRequest.of(offset, pageSize, Sort.by(sortByField));
-//
-//        return folderMessagesRepository.findByFolder(folder, pageable);
-//    }
-//    public Page<FolderMessage> getPaginatedMessagesWithSortingAndSearch(Folder folder, int offset, int pageSize, String sortByField, String searchByContent) {
-//        Pageable pageable = PageRequest.of(offset, pageSize, Sort.by(sortByField));
-//        return folderMessagesRepository.findByFolderAndMessage_ContentContaining(folder, searchByContent, pageable);
-//    }
-    public Page<FolderMessage> getPaginatedMessagesWithSortingAndSearch(Folder folder, int offset, int pageSize, String sortByField, Sort.Direction direction, String searchField, String keyword) {
-//        Pageable pageable = PageRequest.of(offset, pageSize, Sort.by(Sort.Direction direction , sortByField));
-        Sort sort=Sort.by(direction,sortByField);
-        Pageable pageable = PageRequest.of(offset, pageSize, sort);
+    public Page<FolderMessage> getPaginatedMessagesWithSortingAndSearch(Folder folder, Pageable page, String searchField, String keyword) {
 
         return switch (searchField) {
             case "content" ->
-                    folderMessagesRepository.findByFolderAndMessage_ContentContainingIgnoreCase(folder, keyword, pageable);
+                    folderMessagesRepository.findByFolderAndMessage_ContentContainingIgnoreCase(folder, keyword, page);
             case "sender" ->
-                    folderMessagesRepository.findByFolderAndMessage_Sender_UsernameContainingIgnoreCase(folder, keyword, pageable);
+                    folderMessagesRepository.findByFolderAndMessage_Sender_UsernameContainingIgnoreCase(folder, keyword, page);
             case "recipient" ->
-                    folderMessagesRepository.findByFolderAndMessage_Recipients_UsernameContainingIgnoreCase(folder, keyword, pageable);
-            default -> folderMessagesRepository.findByFolder(folder, pageable);
+                    folderMessagesRepository.findByFolderAndMessage_Recipients_UsernameContainingIgnoreCase(folder, keyword, page);
+            default -> folderMessagesRepository.findByFolder(folder, page);
         };
     }
     public Page<FolderMessage> searchMessagesInFolder(Folder folder, String keyword, int offset, int pageSize, String sortByField) {

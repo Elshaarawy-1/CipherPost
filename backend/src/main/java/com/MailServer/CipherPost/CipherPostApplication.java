@@ -12,19 +12,22 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+//import org.springframework.boot.
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "com.MailServer.CipherPost")
+@EnableJpaRepositories("com.MailServer.CipherPost.repositories")
+//@ComponentScan(basePackages = "com.MailServer.CipherPost")
 public class CipherPostApplication {
 	@Autowired
 	UserRepository userRepository;
@@ -89,7 +92,7 @@ public class CipherPostApplication {
 			Message fakeMessage = new Message(user, messageRecipients, subject, content, timestamp);
 			messages.add(fakeMessage);
 			for (int j = 0; j < numRecipients; j++) {
-				folder = folderService.findFolderByNameAndUser("inbox", messageRecipients.get(j));
+				folder = folderService.getFolderByNameAndUser("inbox", messageRecipients.get(j));
 				folderMessages.add(new FolderMessage(fakeMessage, folder, new Timestamp(System.currentTimeMillis() - 5000000 * i * 1000L) ));
 			}
 

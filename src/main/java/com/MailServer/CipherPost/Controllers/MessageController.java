@@ -1,5 +1,6 @@
 package com.MailServer.CipherPost.Controllers;
 
+import com.MailServer.CipherPost.Adapters.MessageAdapter;
 import com.MailServer.CipherPost.Commands.Command;
 import com.MailServer.CipherPost.Commands.Messages.ComposeMessage;
 import com.MailServer.CipherPost.Commands.Messages.DeleteMessage;
@@ -15,11 +16,14 @@ import com.MailServer.CipherPost.repositories.FolderRepository;
 import com.MailServer.CipherPost.repositories.MessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -54,21 +58,30 @@ public class MessageController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @GetMapping("/get/{folder_id}")
-    public List<FolderMessage> getMessages(
+    public List<MessageDTO> getMessages(
             @PathVariable("folder_id") Long folder_id,
             @RequestParam(defaultValue = "message.timestamp") String sortField,
             @RequestParam(defaultValue = "desc") String sortDirection,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "12") int size,
             @RequestParam(defaultValue = "") String searchField,
             @RequestParam(defaultValue = "") String keyword
     ) {
         Folder folder = folderRepository.findById(folder_id).orElse(null);
         if (folder == null) {
-            return (List<FolderMessage>) ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            return null;
         } else {
             Sort.Direction direction = sortDirection.equalsIgnoreCase("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-            Command<Page<FolderMessage>> getCommand = new GetMessages(messageFacade, folder, sortField, direction, searchField, keyword);
-            Page<FolderMessage> page = getCommand.execute();
-            return page.getContent();
+            Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortField));
+            Command<Page<FolderMessage>> getCommand = new GetMessages(messageFacade, folder, pageable, searchField, keyword);
+            Page<FolderMessage> pageRequest = getCommand.execute();
+            MessageAdapter adapter = new MessageAdapter();
+            List<FolderMessage> folder_msgs= pageRequest.getContent();
+            List<MessageDTO> req_msgs = new LinkedList<>();
+            for (FolderMessage folder_msg : folder_msgs) {
+                req_msgs.add(adapter.toDto(folder_msg.getMessage()));
+            }
+            return req_msgs;
         }
     }
     @GetMapping("/move/{folder_id}/{msg_id}/{new_folder_id}")

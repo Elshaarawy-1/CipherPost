@@ -89,7 +89,7 @@ public class CipherPostApplication {
 			Message fakeMessage = new Message(user, messageRecipients, subject, content, timestamp);
 			messages.add(fakeMessage);
 			for (int j = 0; j < numRecipients; j++) {
-				folder = folderService.findFolderByNameAndUser("inbox", messageRecipients.get(j));
+				folder = folderService.getFolderByNameAndUser("inbox", messageRecipients.get(j));
 				folderMessages.add(new FolderMessage(fakeMessage, folder, new Timestamp(System.currentTimeMillis() - 5000000 * i * 1000L) ));
 			}
 

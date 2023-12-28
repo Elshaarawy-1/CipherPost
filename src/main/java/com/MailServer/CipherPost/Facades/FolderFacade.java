@@ -26,11 +26,28 @@ public class FolderFacade {
         folderService.createFolder(user, name);
     }
 
-//    public List<FolderMessage> getMessages(Folder folder) {
-//        return folderMessagesService.getPaginatedMessages(folder, 0, 10).getContent();
-//    }
+    public List<Folder> getFolders(User user) {
+        return folderService.getFolders(user);
+    }
 
-//    public List<FolderMessage> getMessages(Folder folder, String contentSearch, String sortField) {
-//        return folderMessagesService.getPaginatedMessagesWithSortingAndSearch(folder, 0, 10, sortField, contentSearch).getContent();
-//    }
+    public void deleteFolderByName(User user, String folderName) {
+        Folder folder = folderService.getFolderByNameAndUser(folderName, user);
+        if (folder != null) {
+            folderService.deleteFolder(folder);
+        }
+    }
+
+    public void deleteFolderByUserAndFolderId(User user, Long folderId) {
+        Folder folder = folderService.getFolderByIdAndUser(folderId, user);
+        if (folder != null) {
+            folderService.deleteFolder(folder);
+        }
+    }
+
+    public void renameFolder(User user, Long folder_id, String newName) {
+        Folder folder = folderService.getFolderByIdAndUser(folder_id, user);
+        if (folder != null) {
+            folderService.renameFolder(folder, newName);
+        }
+    }
 }

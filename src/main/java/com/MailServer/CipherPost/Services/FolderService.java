@@ -6,10 +6,6 @@ import com.MailServer.CipherPost.repositories.FolderRepository;
 import com.MailServer.CipherPost.repositories.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -27,7 +23,7 @@ public class FolderService {
     @Autowired
     private FolderMessagesRepository folderMessagesRepository;
 
-    public Folder findFolderByNameAndUser(String folderName, User user) {
+    public Folder getFolderByNameAndUser(String folderName, User user) {
         return folderRepository.findByFolderNameAndUser(folderName, user);
     }
 
@@ -36,7 +32,7 @@ public class FolderService {
 
         User user = userOptional.orElseThrow(() -> new EntityNotFoundException("User not found with ID: " + userId));
 
-        return findFolderByNameAndUser(folderName, user);
+        return getFolderByNameAndUser(folderName, user);
     }
 
     public void cleanUpTrashFolder() {
@@ -57,7 +53,10 @@ public class FolderService {
 
     public void createFolder(User user, String name) {
         Folder folder = new Folder(user, name);
-        folderRepository.save(folder);
+        Folder isExist = folderRepository.findByFolderNameAndUser(name, user);
+        if (isExist == null) {
+            folderRepository.save(folder);
+        }
     }
 
     public void deleteMessageFromFolder(Message msg, Folder folder) {
@@ -72,25 +71,6 @@ public class FolderService {
 
     }
 
-//    public void searchMessages(Folder messageFolder, String criteria, String searchInput) {
-//        Pageable pageable = PageRequest.of(0, 10, Sort.by("addTime").descending());
-//        Page<FolderMessage> folderMessages = switch (criteria) {
-//            case "content" ->
-//                    folderMessagesRepository.findByFolderAndMessage_ContentContainingIgnoreCase(messageFolder, searchInput, pageable);
-//            case "sender" ->
-//                    folderMessagesRepository.findByFolderAndMessage_Sender_UsernameContainingIgnoreCase(messageFolder, searchInput, pageable);
-//            case "recipients" ->
-//                    folderMessagesRepository.findByFolderAndMessage_Recipients_UsernameContainingIgnoreCase(messageFolder, searchInput, pageable);
-//            default -> folderMessagesRepository.findByFolderAndMessage_SubjectContainingIgnoreCase(messageFolder, searchInput, pageable);
-//
-//        };
-//        System.out.println(folderMessages.getContent());
-//    }
-
-//    public List<FolderMessage> getMessages(Folder folder) {
-//        Pageable pageable = PageRequest.of(0, 10, Sort.by("addTime").descending());
-//        return folderMessagesRepository.findByFolder(folder, pageable).getContent();
-//    }
 
     public void moveMessageToFolder(Message msg, Folder source, Folder destination) {
         FolderMessage folderMessage = folderMessagesRepository.findByFolderAndMessage(source, msg);
@@ -106,5 +86,13 @@ public class FolderService {
                 folderMessagesRepository.save(folderMessage);
             }
         }
+    }
+
+    public List<Folder> getFolders(User user) {
+        return folderRepository.findFolderByUser(user);
+    }
+
+    public Folder getFolderByIdAndUser(Long folderId, User user) {
+        return folderRepository.findFolderByIdAndUser(folderId, user);
     }
 }

@@ -8,7 +8,7 @@ public class FolderDTO {
         return folder_id;
     }
 
-    public String getFolder_name() {
+    public String getFolderName() {
         return folder_name;
     }
 
@@ -19,4 +19,5 @@ public class FolderDTO {
     public void setFolder_name(String folder_name) {
         this.folder_name = folder_name;
     }
+
 }

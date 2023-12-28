@@ -1,8 +1,11 @@
 package com.MailServer.CipherPost.entities;
 import com.MailServer.CipherPost.DTOs.MessageDTO;
 
+import com.MailServer.CipherPost.Services.UserService;
+import com.MailServer.CipherPost.repositories.UserRepository;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Type;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.sql.Time;
@@ -101,14 +104,17 @@ public Message(MessageBuilder builder) {
         private List<Attachment> attachments = new ArrayList<>();
 
         public MessageBuilder(MessageDTO msg) {
+            UserService userService = new UserService();
+            this.recipients = new ArrayList<>();
+            for (String recipient : msg.getRecipients()) {
+                this.recipients.add(userService.getUserByUsername(recipient));
+            }
             this.sender = msg.getSender();
-            this.recipients = msg.getRecipients();
             this.time = new Timestamp(System.currentTimeMillis());
             this.msg_priority = msg.getPriority();
             this.subject = msg.getSubject();
             this.content = msg.getContent();
         }
-
         public MessageBuilder withAttachments(List<Attachment> attachments) {
             this.attachments.addAll(attachments);
             return this;

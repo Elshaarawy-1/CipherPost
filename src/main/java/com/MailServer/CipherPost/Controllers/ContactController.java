@@ -1,5 +1,6 @@
 package com.MailServer.CipherPost.Controllers;
 
+import com.MailServer.CipherPost.Adapters.ContactAdapter;
 import com.MailServer.CipherPost.Commands.Command;
 import com.MailServer.CipherPost.Commands.Contacts.*;
 import com.MailServer.CipherPost.Commands.Messages.ComposeMessage;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedList;
 import java.util.List;
 
 @RestController
@@ -30,10 +32,12 @@ public class ContactController {
     @Autowired
     ContactFacade contactFacade;
     @GetMapping("/get/{user_id}")
-    public List<Contact> getContacts(@PathVariable Long user_id){
+    public List<ContactDTO> getContacts(@PathVariable Long user_id){
         User user = userService.getUserById(user_id);
         Command<List<Contact>> getCommand = new GetContacts(contactFacade, user);
-        return getCommand.execute();
+        List<Contact> contacts = getCommand.execute();
+        ContactAdapter adapter = new ContactAdapter();
+        return adapter.toListDTO(contacts);
     }
 
     @PostMapping("/add/{user_id}")
@@ -69,23 +73,28 @@ public class ContactController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         else {
-            Command<Void> editCommand = new EditContact(contactFacade, contact, updated_contact);
+            Contact updated = new Contact(contact.getUser(),updated_contact);
+            Command<Void> editCommand = new EditContact(contactFacade, contact, updated);
             editCommand.execute();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
     @PostMapping("/sort/{user_id}")
-    public List<Contact> sortContacts(@PathVariable Long user_id){
+    public List<ContactDTO> sortContacts(@PathVariable Long user_id){
         User user = userService.getUserById(user_id);
         Command<List<Contact>> sortCommand = new SortContacts(contactFacade, user);
-        return sortCommand.execute();
+        List<Contact> contacts = sortCommand.execute();
+        ContactAdapter adapter = new ContactAdapter();
+        return adapter.toListDTO(contacts);
     }
     @GetMapping("/search/{user_id}")
-    public List<Contact> searchContacts(@PathVariable Long user_id, @RequestParam String search){
+    public List<ContactDTO> searchContacts(@PathVariable Long user_id, @RequestParam String search){
         User user = userService.getUserById(user_id);
         Command<List<Contact>> searchCommand = new SearchContact(contactFacade, user, search);
-        return searchCommand.execute();
+        List<Contact> contacts = searchCommand.execute();
+        ContactAdapter adapter = new ContactAdapter();
+        return adapter.toListDTO(contacts);
     }
 
 }

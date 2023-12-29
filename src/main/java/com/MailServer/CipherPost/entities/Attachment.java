@@ -25,6 +25,7 @@ public class Attachment {
     @Column(name = "DATA", nullable = true)
     private byte[] data;
 
+    private String base64String; // TODO: employ this
     public Attachment(String file, String contentType, byte[] bytes) {
         this.filename = file;
         this.contentType = contentType;
@@ -59,5 +60,13 @@ public class Attachment {
 
     public void setData(byte[] data) {
         this.data = data;
+    }
+
+    public String getBase64String() {
+        return base64String;
+    }
+
+    public void setBase64String(String base64String) {
+        this.base64String = base64String;
     }
 }

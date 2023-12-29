@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -38,7 +39,8 @@ public class UserService {
         userRepository.save(user);
     }
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
+        Optional<User> user = userRepository.findById(id);
+        return user.orElseGet(() -> userRepository.findById(id).orElse(null));
     }
     public User getUserByUsername(String username) {
         return userRepository.findByUsername(username);

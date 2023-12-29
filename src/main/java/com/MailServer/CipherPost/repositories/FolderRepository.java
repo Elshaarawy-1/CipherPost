@@ -12,7 +12,7 @@ import java.util.Optional;
 public interface FolderRepository extends JpaRepository<Folder, Long> {
     Folder findByFolderNameAndUser(String folderName, User user);
     Folder findFolderByFolderNameAndUser_Username(String folderName, String username);
-
+    Folder findFolderByUser_Id(Long id);
     List<Folder> findFolderByUser(User user);
 
     Folder findFolderByIdAndUser(Long id, User user);

@@ -8,6 +8,7 @@ import com.MailServer.CipherPost.entities.User;
 
 public class MessageDTO {
     private User sender;
+    private Long id;
     private List<String> recipients;
     private List<String> CC_recipients;
     private Timestamp time;
@@ -85,6 +86,14 @@ public class MessageDTO {
 
     public void setCC_recipients(List<String> CC_recipients) {
         this.CC_recipients = CC_recipients;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
 

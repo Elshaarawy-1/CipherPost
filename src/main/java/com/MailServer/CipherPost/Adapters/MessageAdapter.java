@@ -29,6 +29,7 @@ public class MessageAdapter implements Adapter<Message, MessageDTO> {
         messageDTO.setSubject(message.getSubject());
         messageDTO.setContent(message.getContent());
         messageDTO.setAttachments(message.getAttachments());
+        messageDTO.setId(message.getId());
         return messageDTO;
     }
     public List<MessageDTO> toListDTO(List<Message> messages) {

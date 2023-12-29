@@ -21,6 +21,8 @@ public interface FolderMessagesRepository extends JpaRepository<FolderMessage, L
             "WHERE f.folderName = :folderName AND fm.addTime < :thirtyDaysAgo")
     List<FolderMessage> findByFolder_FolderNameAndAddTimeBefore(String folderName, Timestamp thirtyDaysAgo);
     Page<FolderMessage> findByFolder(Folder folder, Pageable pageable);
+//    Page<FolderMessage> findByFolder(Folder folder);
+
 
     FolderMessage findByFolderAndMessage(Folder source, Message msg);
 

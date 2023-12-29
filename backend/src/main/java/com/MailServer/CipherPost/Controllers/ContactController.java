@@ -3,17 +3,12 @@ package com.MailServer.CipherPost.Controllers;
 import com.MailServer.CipherPost.Adapters.ContactAdapter;
 import com.MailServer.CipherPost.Commands.Command;
 import com.MailServer.CipherPost.Commands.Contacts.*;
-import com.MailServer.CipherPost.Commands.Messages.ComposeMessage;
 import com.MailServer.CipherPost.Facades.ContactFacade;
 import com.MailServer.CipherPost.Services.ContactService;
 import com.MailServer.CipherPost.Services.UserService;
 import com.MailServer.CipherPost.entities.Contact;
-import com.MailServer.CipherPost.entities.Folder;
 import com.MailServer.CipherPost.DTOs.ContactDTO;
-import com.MailServer.CipherPost.DTOs.FolderDTO;
-import com.MailServer.CipherPost.DTOs.MessageDTO;
 import com.MailServer.CipherPost.entities.User;
-import com.MailServer.CipherPost.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,8 +27,17 @@ public class ContactController {
     ContactService contactService;
     @Autowired
     ContactFacade contactFacade;
-    @GetMapping("/get/{user_id}")
-    public List<ContactDTO> getContacts(@PathVariable Long user_id){
+
+    private Long extractUserId(String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return Long.parseLong(authorizationHeader.substring(7));
+        }
+        throw new IllegalArgumentException("Invalid Authorization header format");
+    }
+
+    @GetMapping("/get")
+    public List<ContactDTO> getContacts(@RequestHeader("Authorization") String authorizationHeader){
+        Long user_id = extractUserId(authorizationHeader);
         User user = userService.getUserById(user_id);
         Command<List<Contact>> getCommand = new GetContacts(contactFacade, user);
         List<Contact> contacts = getCommand.execute();
@@ -41,8 +45,9 @@ public class ContactController {
         return adapter.toListDTO(contacts);
     }
 
-    @PostMapping("/add/{user_id}")
-    public ResponseEntity<Void> addContact(@RequestBody ContactDTO new_contact, @PathVariable("user_id") Long user_id) {
+    @PostMapping("/add")
+    public ResponseEntity<Void> addContact(@RequestHeader("Authorization") String authorizationHeader, @RequestBody ContactDTO new_contact) {
+        Long user_id = extractUserId(authorizationHeader);
         User user = userService.getUserById(user_id);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -81,16 +86,18 @@ public class ContactController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
 
     }
-    @PostMapping("/sort/{user_id}")
-    public List<ContactDTO> sortContacts(@PathVariable Long user_id){
+    @PostMapping("/sort")
+    public List<ContactDTO> sortContacts(@RequestHeader("Authorization") String authorizationHeader ){
+        Long user_id = extractUserId(authorizationHeader);
         User user = userService.getUserById(user_id);
         Command<List<Contact>> sortCommand = new SortContacts(contactFacade, user);
         List<Contact> contacts = sortCommand.execute();
         ContactAdapter adapter = new ContactAdapter();
         return adapter.toListDTO(contacts);
     }
-    @GetMapping("/search/{user_id}")
-    public List<ContactDTO> searchContacts(@PathVariable Long user_id, @RequestParam String search){
+    @GetMapping("/search")
+    public List<ContactDTO> searchContacts(@RequestHeader("Authorization") String authorizationHeader, @RequestParam String search){
+        Long user_id = extractUserId(authorizationHeader);
         User user = userService.getUserById(user_id);
         Command<List<Contact>> searchCommand = new SearchContact(contactFacade, user, search);
         List<Contact> contacts = searchCommand.execute();

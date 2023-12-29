@@ -26,7 +26,7 @@ import java.util.Optional;
 import java.util.Random;
 
 @SpringBootApplication(scanBasePackages = "com.MailServer.CipherPost")
-@EnableJpaRepositories("com.MailServer.CipherPost.repositories")
+//@EnableJpaRepositories("com.MailServer.CipherPost.repositories")
 //@ComponentScan(basePackages = "com.MailServer.CipherPost")
 public class CipherPostApplication {
 	@Autowired

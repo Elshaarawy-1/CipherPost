@@ -1,6 +1,5 @@
 package com.MailServer.CipherPost.Controllers;
 
-import com.MailServer.CipherPost.Adapters.ContactAdapter;
 import com.MailServer.CipherPost.Adapters.FolderAdapter;
 import com.MailServer.CipherPost.Commands.Command;
 import com.MailServer.CipherPost.Commands.Folders.CreateFolder;
@@ -26,8 +25,16 @@ public class FolderController {
     UserService userService;
     @Autowired
     FolderFacade folderFacade;
-    @GetMapping("/get/{user_id}")
-    public List<FolderDTO> getFolders(@PathVariable Long user_id) {
+
+    private Long extractUserId(String authorizationHeader) {
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            return Long.parseLong(authorizationHeader.substring(7));
+        }
+        throw new IllegalArgumentException("Invalid Authorization header format");
+    }
+    @GetMapping("/get")
+    public List<FolderDTO> getFolders(@RequestHeader("Authorization") String authorizationHeader) {
+        Long user_id = extractUserId(authorizationHeader);
         User user = userService.getUserById(user_id);
         if (user == null) {
             return null;
@@ -40,9 +47,9 @@ public class FolderController {
         }
 
     }
-    @PostMapping("/create/{user_id}")
-        public ResponseEntity<Void> createFolder(@PathVariable Long user_id, @RequestBody FolderDTO new_folder) {
-        // TODO: creating folder, takes folderDTO description to be created, returns void response
+    @PostMapping("/create")
+        public ResponseEntity<Void> createFolder(@RequestHeader("Authorization") String authorizationHeader, @RequestBody FolderDTO new_folder) {
+        Long user_id = extractUserId(authorizationHeader);
         User user = userService.getUserById(user_id);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -55,24 +62,23 @@ public class FolderController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PostMapping("/rename/{user_id}/{folder_id}")
-    public ResponseEntity<Void> renameFolder(@PathVariable Long user_id , @PathVariable Long folder_id, @RequestBody String new_name ) {
-        // TODO: creating folder, takes folderDTO to be renamed, new name, returns void response
+    @PostMapping("/rename/{folder_id}")
+    public ResponseEntity<Void> renameFolder(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long folder_id, @RequestBody String new_name ) {
+        Long user_id = extractUserId(authorizationHeader);
         User user = userService.getUserById(user_id);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         else {
-//            String folder_name = folder.getFolderName();
             Command<Void> renameCommand = new RenameFolder(folderFacade, user, folder_id, new_name);
             renameCommand.execute();
         }
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @GetMapping("/delete/{user_id}/{folder_id}")
-    public ResponseEntity<Void> deleteFolder(@PathVariable Long user_id, @PathVariable Long folder_id) {
-        // TODO: creating folder, takes folder id to be deleted, new name, returns void response
+    @GetMapping("/delete/{folder_id}")
+    public ResponseEntity<Void> deleteFolder(@RequestHeader("Authorization") String authorizationHeader, @PathVariable Long folder_id) {
+        Long user_id = extractUserId(authorizationHeader);
         User user = userService.getUserById(user_id);
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

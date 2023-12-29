@@ -3,6 +3,7 @@ package com.MailServer.CipherPost.DTOs;
 public class FolderDTO {
     private String folder_name;
     private Long folder_id;
+//    private int folder_messages;
 
     public Long getFolder_id() {
         return folder_id;
@@ -20,4 +21,15 @@ public class FolderDTO {
         this.folder_name = folder_name;
     }
 
+    public String getFolder_name() {
+        return folder_name;
+    }
+
+//    public int getFolder_messages() {
+//        return folder_messages;
+//    }
+//
+//    public void setFolder_messages(int folder_messages) {
+//        this.folder_messages = folder_messages;
+//    }
 }
